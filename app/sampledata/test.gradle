@@ -1,0 +1,74 @@
+Task showExt2 = task("showExt2")
+showExt2.doFirst {
+    println("showExt2 doFirst ")
+}
+
+showExt2.doLast {
+    println("showExt2 doLast ")
+}
+
+showExt2.configure {
+    println("showExt2 configure ")
+}
+
+task showExt1(dependsOn: showExt2) {
+    doLast {
+        println "ext.kotlin_version:${kotlin_version2}"
+
+        sourceSets.each {
+            println("${it.name}的resources1是:${it.resourcesDir}")
+        }
+        println "date:${buildTime()}"
+    }
+
+}
+
+def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format("yyyy-MM-dd")
+    return formattedDate
+}
+
+task task3
+
+tasks['task3'].doLast {
+    println(tasks.findByPath('task3'))
+    println(tasks.getByPath('task3'))
+    println(tasks.findByPath('task1'))
+    println(tasks.findByName('task3'))
+    println(tasks.findByName('task3'))
+    println(tasks.findByName('task1'))
+}
+//task3.enabled = false  //用于启用和禁用任务
+
+tasks.create("task4")
+task4.description = "我是介绍分组的"
+task4.setGroup("test")
+task4.doLast({
+    println("group:${group},description:${description}")
+})
+
+//task3.mustRunAfter(task4)
+
+task3.shouldRunAfter(task4)
+
+tasks.addRule("异常处理") {
+//    String taskName ->
+//        task(taskName) << {
+            println("任务不存在")
+//        }
+
+}
+
+//task3.mustRunAfter(task5)
+
+
+class  ExPlugin implements Plugin<Project>{
+
+    @Override
+    void apply(Project target) {
+           target.task('ExPluginTask'){
+               println("自定义组件")
+           }
+    }
+}

@@ -1,0 +1,4 @@
+ext{
+    kotlin_version2 = '1.2.41'
+}
+
